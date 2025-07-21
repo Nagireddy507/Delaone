@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blueberry Systems</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Reset basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: white;
+  color: #111;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid #ddd;
+
+}
+.dropdown-menu{
+  position: relative;
+  display: none;
+  list-style: none;
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.submenu{
+  display: none;
+  position: absolute;
+  background-color: #111;
+  padding: 10px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #021f34, #057ca7);
+  color: white;
+  padding: 100px 40px;
+}
+
+.hero .service-label {
+  color: #00b5f1;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: 1.5rem;
+  max-width: 1000px;
+  font-display: fallback;
+}
+.main-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logo-section img {
+  height: 60px; /* Resize as needed */
+  width: auto;
+  display: block;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="file:///C:/Users/BijivemulaNagireddy/OneDrive%20-%20delaPlex/Desktop/Downloadslogo.png/Blueberry%20logo.png">
+       
+    </div>
+    <nav>
+      <ul class="nav-links">
+  <li class="dropdown">
+    <a href="https://blueberrysys.com/services/" class="dropdown-toggle">Services +</a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Data Analytics</a></li>
+      <li><a href="#">Cloud Computing</a></li>
+      <li><a href="#">AI Solutions</a></li>
+    </ul>
+  </li>
+        <li><a href="https://blueberrysys.com/solutions/">Solutions +</a></li>
+        <li><a href="https://blueberrysys.com/insights/">Insights +</a></li>
+        <li><a href="https://blueberrysys.com/about-us/">About Us +</a></li>
+        <li><a href="https://blueberrysys.com/contact-us/">Contact Us</a></li>
+        <li><a href="https://delaplex.com/">🌐</a></li>
+      </ul>
+    </nav>
+  </header>
+  <script>
+    // Toggle only when the "+" button is clicked
+    document.querySelectorAll('.dropdown-toggle').forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.stopPropagation(); // prevent bubbling
+        const parentDropdown = this.closest('.dropdown');
+        parentDropdown.classList.toggle('open');
+      });
+    });
+
+    // Close all dropdowns when clicking elsewhere
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        drop.classList.remove('open');
+      });
+    });
+  </script>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="service-label">SERVICES</p>
+      <h1>Empowering your business through tailored technology solutions</h1>
+    </div>
+  </section>
+  
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
+      
+    </nav>
+  </header>
+  <script>
+    const button = document.querySelector('.dropdown-button');
+const parentDropdown = button.closest('.dropdown');
+
+button.addEventListener('mouseenter', () => {
+  // Close other dropdowns
+  document.querySelectorAll('.dropdown').forEach(drop => {
+    if (drop !== parentDropdown) {
+      drop.classList.remove('open');
+    }
+  });
+  parentDropdown.classList.add('open');
+});
+        parentDropdown.classList.toggle('open');
+        parentDropdown.addEventListener('mouseleave', () =>{
+          parentDropdown.classList.remove('open');
+        });
+
+    // Close all dropdowns when clicking elsewhere
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        drop.classList.remove('open');
+      });
+    });
+  </script>
+
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
+</body>
+</html>
+      </ul>
+    </nav>
+  </header>
+  <script>
+    // Toggle only when the "+" button is clicked
+    document.querySelectorAll('.dropdown-toggle').forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.stopPropagation(); // prevent bubbling
+        // Close all dropdowns first
+        document.querySelectorAll('.dropdown').forEach(drop => {
+          drop.classList.remove('open');
+        });
+        // Then open the clicked one if it wasn't already open
+        const parentDropdown = this.closest('.dropdown');
+        parentDropdown.classList.toggle('open');
+      });
+    });
+
+    // Close all dropdowns when clicking elsewhere
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        drop.classList.remove('open');
+      });
+    });
+  </script>
+
+
+  <!-- Script -->
+  <script src="script.js"></script>
+
+</body>
+</html>
+</body>
+</html>

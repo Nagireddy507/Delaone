@@ -1,0 +1,81 @@
+/* General */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: rgba(215, 215, 218, 0.863);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+img {
+  width: 150px;
+  height: auto;
+}
+
+.logo {
+  height: 60px;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Hero */
+.hero {
+  height: 24vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgb(194, 35, 62);
+}
+.hero h1 {
+  font-size: 48px;
+}
+.hero p {
+  font-size: 20px;
+}
+
+/* Services */
+.services {
+  padding: 60px 40px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+.service-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.service-card {
+  width: 250px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin: 10px;
+}
+
+/* About */
+.about {
+  padding: 60px 40px;
+  text-align: center;
+}
+
+/* Footer */
+.main-footer {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Page</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+    }
+    form {
+      display: inline-block;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      width: 220px;
+      padding: 7px 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus {
+      border: 1.5px solid #6a5acd;
+    }
+    button[type="submit"] {
+      background: #6a5acd;
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+      background: #483d8b;
+    }
+    #submittedData {
+      margin-top: 30px;
+    }
+    #submittedData h3 {
+      color: #6a5acd;
+      margin-bottom: 15px;
+    }
+    #submittedData table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      min-width: 350px;
+    }
+    #submittedData th, #submittedData td {
+      border: 1px solid #bbb;
+      padding: 10px 18px;
+      font-size: 15px;
+    }
+    #submittedData th {
+      background: #f0f0ff;
+      color: #483d8b;
+      text-align: left;
+      width: 140px;
+    }
+    #submittedData td {
+      color: #222;
+      background: #fafaff;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="color: brown;">Fill the form with your details</h2>
+  <form onsubmit="submitForm(event)">
+    <label>Name:<span style="color: green;">*</span></label><br>
+    <input type="text" id="name" placeholder="Enter your name" required><br><br>
+    <label>Email:<span style="color: green;">*</span></label><br>
+    <input type="email" id="email" placeholder="Enter your email" required><br><br>
+    <label>Age:<span style="color: green;">*</span></label><br>
+    <input type="number" id="age" min="1" placeholder="Enter your age" required><br><br>
+    <label>Location:<span style="color: green;">*</span></label><br>
+    <input type="text" id="location" placeholder="Enter your location" required><br><br>
+    <label>Company Working:<span style="color: green;">*</span></label><br>
+    <input type="text" id="company" placeholder="Enter your company" required><br><br>
+    <label>Company Role:<span style="color: green;">*</span></label><br>
+    <input type="text" id="role" placeholder="Enter your role" required><br><br>
+    <label>Team:<span style="color: green;">*</span></label><br>
+    <input type="text" id="team" placeholder="Enter your team" required><br><br>
+    <label>Salary:<span style="color: green;">*</span></label><br>
+    <input type="number" id="salary" min="10000" placeholder="Enter your salary" required><br><br>
+    <label>Timings:<span style="color: green;">*</span></label><br>
+    <input type="number" id="timings" placeholder="Enter your timings" required><br><br>
+    <label>Experience:<span style="color: grren;">*</span></label><br>
+    <input type="number" id="Experience" min="1" placeholder="Enter your experience" required><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="submittedData"></div>
+
+  <script>
+    function submitForm(e) {
+      e.preventDefault();
+
+      const formData = {
+        Name: document.getElementById("name").value,
+        Email: document.getElementById("email").value,
+        Age: document.getElementById("age").value,
+        Location: document.getElementById("location").value,
+        Company: document.getElementById("company").value,
+        Role: document.getElementById("role").value,
+        Team: document.getElementById("team").value,
+        Salary: document.getElementById("salary").value,
+        Timings: document.getElementById("timings").value,
+        Experience: document.getElementById("Experience").value
+      };
+
+      let tableHtml = `
+        <html>
+        <head>
+          <title>Submitted Data</title>
+          <style>
+            body { text-align: center; font-family: Arial, sans-serif; background: #f7f7f7; }
+            h3 { color: #6a5acd; margin-bottom: 15px; }
+            table { border-collapse: collapse; margin: 0 auto; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); min-width: 350px; }
+            th, td { border: 1px solid #bbb; padding: 10px 18px; font-size: 15px; }
+            th { background: #f0f0ff; color: #483d8b; text-align: left; width: 140px; }
+            td { color: #222; background: #fafaff; }
+          </style>
+        </head>
+        <body>
+          <h3>Submitted Data</h3>
+          <table>
+            <tbody>
+              ${Object.entries(formData).map(([key, value]) => `<tr><th>${key}</th><td>${value}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const newTab = window.open();
+      newTab.document.write(tableHtml);
+      newTab.document.close();
+    }
+  </script>
+</body>
+</html>

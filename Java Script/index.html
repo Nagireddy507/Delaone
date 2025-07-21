@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step User Details Form</title>
+
+    <style>
+        /* --- General Styling --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #9b0d0d;
+            display: flex;
+            flex-direction: column; /* Allow vertical stacking of containers */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; /* Add some padding around the content */
+            box-sizing: border-box; /* Include padding in element's total width/height */
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px; /* Space between multiple containers if visible */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"],
+        .form-group input[type="number"], /* Added for age */
+        .form-group select,
+        .form-group textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Space between buttons */
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-grow: 1; /* Make buttons grow to fill space */
+        }
+
+        button[type="submit"], #nextStepBtn, #submitAllBtn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        button[type="submit"]:hover, #nextStepBtn:hover, #submitAllBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #prevStepBtn, #fillAnotherFormBtn {
+            background-color: #6c757d; /* Grey for back/reset buttons */
+            color: white;
+        }
+
+        #prevStepBtn:hover, #fillAnotherFormBtn:hover {
+            background-color: #5a6268;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* --- Styles for the Data Display Page --- */
+        #displayContainer h2 {
+            margin-bottom: 20px;
+        }
+
+        #displayContainer p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        #displayContainer strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="step1FormContainer">
+        <h2>Step 1: Personal Details</h2>
+        <form id="personalDetailsForm">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="e.g., 1234567890">
+                <div class="error" id="phoneError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob">
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button type="button" id="nextStepBtn">Next Step</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="step2FormContainer" style="display: none;">
+        <h2>Step 2: Additional Details</h2>
+        <form id="additionalDetailsForm">
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pincode:</label>
+                <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" placeholder="e.g., 500001">
+                <div class="error" id="pincodeError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for=mark>"occupation"</mark>Occupation:</label>
+                <input type="text" id="occupation" name="occupation">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Anything else you want to add?:</label>
+                <textarea id="message" name="message" rows="5"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="button" id="prevStepBtn">Previous</button>
+                <button type="submit" id="submitAllBtn">Submit All Details</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="displayContainer" style="display: none;">
+        <h2>Submitted Details Summary</h2>
+        <p><strong>Full Name:</strong> <span id="displayName"></span></p>
+        <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="displayPhone"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="displayDob"></span></p>
+        <p><strong>Gender:</strong> <span id="displayGender"></span></p>
+        <p><strong>Address:</strong> <span id="displayAddress"></span></p>
+        <p><strong>City:</strong> <span id="displayCity"></span></p>
+        <p><strong>Pincode:</strong> <span id="displayPincode"></span></p>
+        <p><strong>Occupation:</strong> <span id="displayOccupation"></span></p>
+        <p><strong>Message:</strong> <span id="displayMessage"></span></p>
+        <div class="button-group">
+            <button type="button" id="fillAnotherFormBtn" onclick="location.reload()">Fill Another Form</button>
+        </div>
+    </div>
+
+    <script>
+        /* --- JavaScript Logic --- */
+        document.addEventListener('DOMContentLoaded', function() {
+            const step1FormContainer = document.getElementById('step1FormContainer');
+            const step2FormContainer = document.getElementById('step2FormContainer');
+            const displayContainer = document.getElementById('displayContainer');
+
+            const personalDetailsForm = document.getElementById('personalDetailsForm');
+            const additionalDetailsForm = document.getElementById('additionalDetailsForm');
+
+            const nextStepBtn = document.getElementById('nextStepBtn');
+            const prevStepBtn = document.getElementById('prevStepBtn');
+
+            // --- Step 1 Fields & Errors ---
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+
+            // --- Step 2 Fields & Errors ---
+            const pincodeInput = document.getElementById('pincode');
+            const pincodeError = document.getElementById('pincodeError');
+
+            // Object to store all form data across steps
+            let allFormData = {};
+
+            // Function to validate Step 1
+            function validateStep1() {
+                nameError.textContent = '';
+                emailError.textContent = '';
+                phoneError.textContent = '';
+
+                let isValid = true;
+
+                if (nameInput.value.trim() === '') {
+                    nameError.textContent = 'Full Name is required.';
+                    isValid = false;
+                }
+
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailInput.value.trim() === '') {
+                    emailError.textContent = 'Email Address is required.';
+                    isValid = false;
+                } else if (!emailPattern.test(emailInput.value)) {
+                    emailError.textContent = 'Please enter a valid email address.';
+                    isValid = false;
+                }
+
+                const phonePattern = /^[0-9]{10}$/;
+                if (phoneInput.value.trim() !== '' && !phonePattern.test(phoneInput.value)) {
+                    phoneError.textContent = 'Please enter a 10-digit phone number.';
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Function to validate Step 2
+            function validateStep2() {
+                pincodeError.textContent = '';
+                let isValid = true;
+
+                const pincodePattern = /^[0-9]{6}$/;
+                if (pincodeInput.value.trim() !== '' && !pincodePattern.test(pincodeInput.value)) {
+                    pincodeError.textContent = 'Please enter a 6-digit pincode.';
+                    isValid = false;
+                }
+                // Add more validation for Step 2 fields if needed
+
+                return isValid;
+            }
+
+            // Event Listener for "Next Step" button
+            nextStepBtn.addEventListener('click', function() {
+                if (validateStep1()) {
+                    // Collect data from Step 1
+                    allFormData.name = nameInput.value;
+                    allFormData.email = emailInput.value;
+                    allFormData.phone = phoneInput.value;
+                    allFormData.dob = document.getElementById('dob').value;
+                    allFormData.gender = document.getElementById('gender').value;
+
+                    // Hide Step 1, Show Step 2
+                    step1FormContainer.style.display = 'none';
+                    step2FormContainer.style.display = 'block';
+                }
+            });
+
+            // Event Listener for "Previous" button
+            prevStepBtn.addEventListener('click', function() {
+                // Hide Step 2, Show Step 1
+                step2FormContainer.style.display = 'none';
+                step1FormContainer.style.display = 'block';
+
+                // Optionally, re-populate Step 1 fields if you want the user to see their previous input
+                nameInput.value = allFormData.name || '';
+                emailInput.value = allFormData.email || '';
+                phoneInput.value = allFormData.phone || '';
+                document.getElementById('dob').value = allFormData.dob || '';
+                document.getElementById('gender').value = allFormData.gender || '';
+            });
+
+            // Event Listener for final form submission (Step 2)
+            additionalDetailsForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                if (validateStep2()) {
+                    // Collect data from Step 2
+                    allFormData.address = document.getElementById('address').value;
+                    allFormData.city = document.getElementById('city').value;
+                    allFormData.pincode = document.getElementById('pincode').value;
+                    allFormData.occupation = document.getElementById('occupation').value;
+                    allFormData.message = document.getElementById('message').value;
+
+                    // Log combined data
+                    console.log('Final Combined Form Data:', allFormData);
+                    alert('All form steps completed and data submitted!');
+
+                    // Store combined data in localStorage for display
+                    localStorage.setItem('finalFormData', JSON.stringify(allFormData));
+
+                    // Hide Step 2, Show Display Container
+                    step2FormContainer.style.display = 'none';
+                    displayContainer.style.display = 'block';
+
+                    // Populate the display fields
+                    document.getElementById('displayName').textContent = allFormData.name || 'N/A';
+                    document.getElementById('displayEmail').textContent = allFormData.email || 'N/A';
+                    document.getElementById('displayPhone').textContent = allFormData.phone || 'N/A';
+                    document.getElementById('displayDob').textContent = allFormData.dob || 'N/A';
+                    document.getElementById('displayGender').textContent = allFormData.gender || 'N/A';
+                    document.getElementById('displayAddress').textContent = allFormData.address || 'N/A';
+                    document.getElementById('displayCity').textContent = allFormData.city || 'N/A';
+                    document.getElementById('displayPincode').textContent = allFormData.pincode || 'N/A';
+                    document.getElementById('displayOccupation').textContent = allFormData.occupation || 'N/A';
+                    document.getElementById('displayMessage').textContent = allFormData.message || 'N/A';
+
+                    // Clear the `allFormData` object and forms (optional)
+                    allFormData = {};
+                    personalDetailsForm.reset();
+                    additionalDetailsForm.reset();
+                }
+            });
+
+            // --- Initial Load Check for Display ---
+            // If the user refreshes on the display page, show the data again
+            const storedFinalData = localStorage.getItem('finalFormData');
+            if (storedFinalData) {
+                const finalData = JSON.parse(storedFinalData);
+                step1FormContainer.style.display = 'none';
+                step2FormContainer.style.display = 'none';
+                displayContainer.style.display = 'block';
+
+                document.getElementById('displayName').textContent = finalData.name || 'N/A';
+                document.getElementById('displayEmail').textContent = finalData.email || 'N/A';
+                document.getElementById('displayPhone').textContent = finalData.phone || 'N/A';
+                document.getElementById('displayDob').textContent = finalData.dob || 'N/A';
+                document.getElementById('displayGender').textContent = finalData.gender || 'N/A';
+                document.getElementById('displayAddress').textContent = finalData.address || 'N/A';
+                document.getElementById('displayCity').textContent = finalData.city || 'N/A';
+                document.getElementById('displayPincode').textContent = finalData.pincode || 'N/A';
+                document.getElementById('displayOccupation').textContent = finalData.occupation || 'N/A';
+                document.getElementById('displayMessage').textContent = finalData.message || 'N/A';
+            }
+        });
+        
+  function validateForm(event) {
+    const response = grecaptcha.getResponse();
+    if (response.length === 0) {
+      alert("Please verify you are not a robot.");
+      event.preventDefault(); // Stop form from submitting
+    }
+  }
+
+<form onsubmit="validateForm(event)">
+  ...
+</form>
+
+    </script>
+</body>
+</html>

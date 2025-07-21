@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <html>
+    <head>
+        <title>My login Page</title>
+    </head>
+    <style>
+        body{
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            min-height: flex;
+        
+        }
+        form{
+            
+            color: #000;
+            background-color: antiquewhite;
+        }
+     #button{
+            width: 20px;
+            align-items: normal;
+        
+        }
+        ::placeholder{
+            background-color: rgb(231, 240, 240);
+            font-style: italic;
+        }
+    </style>
+    <body>
+        <h1>My website login page</h1>
+        <form>
+            <label for="Username">Username:</label><br>
+            <input type="text" id="username" required placeholder="enter Username"><br><br>
+            <label for="password">password:</label><br>
+            <input type="text" id="password" required placeholder="enter password"><br><br>
+            <label for="email">email:</label><br>
+            <input type="text" id="email" required placeholder="enter email"><br><br>
+            <label for="Name">Name:</label><br>
+            <input type="text" id="name" required placeholder="Entername"><br><br>
+            <label for="MobileNumber">MobileNumber:</label><br>
+            <input type="number" id="MobileNumber" required placeholder="enter MobileNumber"><br><br>
+
+
+            <input type="button" value="login"></input>
+        </form>
+<script>
+        let num1,num2;
+        function generateCaptcha(){
+            num1= math.floor(math.random() *10)+1;
+            num2=math.floor(math.random()  *10)+1;
+            document.getElementById("captchaText").innerText= `solve:${num1} + ${num2} = ?`;
+        }  
+        </script>
+        <div id="welcomemessage">
+ <h1>Welcome to Your Dashboard</h1>
+<p>You have successfully logged in!</p>
+</div>
+
+<title>Welcome</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e0f7fa;
+      text-align: center;
+      margin-top: 100px;
+    }
+  </style>
+<script>
+    function login(){
+        let console=login;
+        let name=document.getElementById("name").value;
+        let username=document.getElementById("username").value;
+        let password=document.getElementById("password").value;
+        if(username&&password){
+            document.getElementById("loginform").style.display="none";
+            document.getElementById("Displayname").innerText="name";
+            Document.getElementById("welcome message").style.display="block";
+           
+
+        }
+        else{
+            alert("please enter your username and password");
+        }
+
+    }
+</script>
+   </body>
+</html>

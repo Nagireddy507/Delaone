@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career path</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for Inter font and basic body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b54c0; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* Hide elements initially */
+        .hidden {
+            display: none;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6; /* Blue-500 */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- Main Application Container -->
+    <div id="app-container" class="bg-white rounded-xl shadow-lg p-8 w-full max-w-4xl transition-all duration-300 ease-in-out">
+
+        <!-- Login/Create Account Page -->
+        <div id="auth-page" class="flex flex-col items-center">
+            <h1 id="auth-title" class="text-4xl font-bold text-gray-800 mb-8">Login</h1>
+
+            <!-- Message Box for alerts -->
+            <div id="message-box" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 w-full max-w-md" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span id="message-text" class="block sm:inline"></span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onclick="document.getElementById('message-box').classList.add('hidden')">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697L11.819 10l3.029 2.651a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                </span>
+            </div>
+
+            <form id="auth-form" class="w-full max-w-md bg-gray-50 p-6 rounded-lg shadow-inner">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username:</label>
+                    <input type="text" id="username" name="username" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your username">
+                </div>
+                <!-- Email field, initially hidden for login mode -->
+                <div id="email-field" class="mb-4 hidden">
+                    <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email:</label>
+                    <input type="email" id="email" name="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password:</label>
+                    <input type="password" id="password" name="password" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your password">
+                </div>
+                <div class="flex items-center justify-between">
+                    <button type="submit" id="auth-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-200 ease-in-out transform hover:scale-105">Login</button>
+                    <button type="button" id="toggle-auth-mode" class="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out">Create Account</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Home Page -->
+        <div id="home-page" class="hidden">
+            <header class="text-center mb-8">
+                <h1 class="text-5xl font-extrabold text-gray-900 mb-4">SmartPrep Hub</h1>
+                <p class="text-lg text-gray-600">Your gateway to a successful career in software development.</p>
+                <!-- Logout button, initially hidden and shown only when returning to auth page -->
+                <button id="logout-button" class="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-lg focus:outline-none focus:shadow-outline transition duration-200 ease-in-out transform hover:scale-105 hidden">Logout</button>
+            </header>
+
+            <!-- About Section -->
+            <section class="mb-12 p-6 bg-blue-50 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">About Us</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    We are a leading software coaching institute dedicated to providing high-quality education and practical training in various programming languages and technologies. Our mission is to equip students with the skills and knowledge required to excel in the competitive IT industry. We focus on hands-on experience, real-world projects, and personalized mentorship to ensure every student achieves their full potential.
+                </p>
+            </section>
+
+            <!-- Courses Section -->
+            <section class="mb-12 p-6 bg-green-50 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-6">Our Courses</h2>
+                <div id="courses-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Course cards will be injected here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Fees Section -->
+            <section class="mb-12 p-6 bg-yellow-50 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-yellow-800 mb-6">Fees Structure</h2>
+                <div id="fees-table" class="overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg shadow-inner">
+                        <thead>
+                            <tr class="bg-yellow-200 text-yellow-900 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left rounded-tl-lg">Course</th>
+                                <th class="py-3 px-6 text-left">Duration</th>
+                                <th class="py-3 px-6 text-left rounded-tr-lg">Fees (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700 text-sm font-light">
+                            <!-- Fees rows will be injected here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Staff Section -->
+            <section class="p-6 bg-purple-50 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-purple-800 mb-6">Our Expert Staff</h2>
+                <div id="staff-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Staff cards will be injected here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Career Path Suggester Section (New Feature) -->
+            <section class="mb-12 p-6 bg-indigo-50 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-indigo-800 mb-4">✨ Career Path Suggester</h2>
+                <p class="text-gray-700 mb-4">Tell us about your interests and skills, and we'll suggest potential software career paths and relevant courses!</p>
+                <div class="mb-4">
+                    <label for="user-interests" class="block text-gray-700 text-sm font-semibold mb-2">Your Interests & Skills:</label>
+                    <textarea id="user-interests" rows="4" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="e.g., I enjoy problem-solving, coding, and designing user interfaces. I have basic knowledge of Python and HTML."></textarea>
+                </div>
+                <button id="suggest-career-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-200 ease-in-out transform hover:scale-105">
+                    <span id="suggest-career-btn-text">✨ Suggest Career Paths</span>
+                    <span id="suggest-career-spinner" class="spinner hidden"></span>
+                </button>
+                <div id="career-suggestions" class="mt-6 p-4 bg-indigo-100 rounded-lg border border-indigo-200 hidden">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-3">Suggested Paths:</h3>
+                    <div id="career-suggestions-content"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const authPage = document.getElementById('auth-page');
+        const homePage = document.getElementById('home-page');
+        const authTitle = document.getElementById('auth-title');
+        const authForm = document.getElementById('auth-form');
+        const authButton = document.getElementById('auth-button');
+        const toggleAuthModeButton = document.getElementById('toggle-auth-mode');
+        const logoutButton = document.getElementById('logout-button');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailField = document.getElementById('email-field');
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
+
+        // New DOM elements for Career Path Suggester
+        const userInterestsInput = document.getElementById('user-interests');
+        const suggestCareerBtn = document.getElementById('suggest-career-btn');
+        const suggestCareerBtnText = document.getElementById('suggest-career-btn-text');
+        const suggestCareerSpinner = document.getElementById('suggest-career-spinner');
+        const careerSuggestionsDiv = document.getElementById('career-suggestions');
+        const careerSuggestionsContent = document.getElementById('career-suggestions-content');
+
+
+        // Application State
+        let isLoginMode = true; // true for login, false for create account
+
+        // Mock Data (replace with actual data from a backend in a real application)
+        // Storing user details as objects { password: "...", email: "..." }
+        const mockUsers = {
+            "user1": { password: "pass123", email: "user1@example.com" },
+            "admin": { password: "adminpass", email: "admin@example.com" }
+        };
+
+        const courses = [
+            { name: "Full Stack Web Development", description: "Master MERN stack, React, Node.js, Express, MongoDB.", image: "https://placehold.co/400x250/F0F9FF/1E40AF?text=Web+Dev", generatedDescription: "" },
+            { name: "Data Science with Python", description: "Learn Python, Pandas, NumPy, Scikit-learn, Machine Learning.", image: "https://placehold.co/400x250/F0FDF4/15803D?text=Data+Science", generatedDescription: "" },
+            { name: "Cloud Computing (AWS/Azure)", description: "Explore cloud services, deployment, and infrastructure management.", image: "https://placehold.co/400x250/FFF7ED/9A3412?text=Cloud+Computing", generatedDescription: "" },
+            { name: "Mobile App Development (React Native)", description: "Build cross-platform mobile apps for iOS and Android.", image: "https://placehold.co/400x250/FEF2F2/B91C1C?text=Mobile+Dev", generatedDescription: "" },
+            { name: "DevOps & CI/CD", description: "Implement CI/CD pipelines, Docker, Kubernetes, Jenkins.", image: "https://placehold.co/400x250/ECFDF5/065F46?text=DevOps", generatedDescription: "" },
+            { name: "Cybersecurity Fundamentals", description: "Understand network security, cryptography, and ethical hacking.", image: "https://placehold.co/400x250/EEF2FF/3730A3?text=Cybersecurity", generatedDescription: "" }
+        ];
+
+        const fees = [
+            { course: "Full Stack Web Development", duration: "6 Months", amount: "45,000" },
+            { course: "Data Science with Python", duration: "5 Months", amount: "40,000" },
+            { course: "Cloud Computing (AWS/Azure)", duration: "4 Months", amount: "35,000" },
+            { course: "Mobile App Development (React Native)", duration: "5 Months", amount: "38,000" },
+            { course: "DevOps & CI/CD", duration: "3 Months", amount: "30,000" },
+            { course: "Cybersecurity Fundamentals", duration: "4 Months", amount: "32,000" }
+        ];
+
+        const staff = [
+            { name: "Dr. Anya Sharma", role: "Lead Instructor, Web Development", bio: "10+ years experience in full-stack development and teaching.", image: "https://placehold.co/150x150/E0F2FE/2563EB?text=AS" },
+            { name: "Prof. Rahul Singh", role: "Data Science Expert", bio: "Ph.D. in AI, specializing in machine learning and data analysis.", image: "https://placehold.co/150x150/D1FAE5/047857?text=RS" },
+            { name: "Ms. Priya Devi", role: "Cloud Architect & Trainer", bio: "Certified AWS/Azure professional with extensive industry experience.", image: "https://placehold.co/150x150/FCE7F3/BE185D?text=PD" },
+            { name: "Mr. Vikram Kumar", role: "Mobile Development Lead", bio: "Expert in React Native and cross-platform mobile solutions.", image: "https://placehold.co/150x150/FFE4E6/DC2626?text=VK" }
+        ];
+
+        /**
+         * Displays a message in the message box.
+         * @param {string} message - The message to display.
+         * @param {boolean} isError - True if it's an error message, false otherwise.
+         */
+        function showMessage(message, isError = true) {
+            messageText.textContent = message;
+            if (isError) {
+                messageBox.classList.remove('bg-green-100', 'border-green-400', 'text-green-700');
+                messageBox.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            } else {
+                messageBox.classList.remove('bg-red-100', 'border-red-400', 'text-red-700');
+                messageBox.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+            }
+            messageBox.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the message box.
+         */
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
+
+        /**
+         * Toggles between login and create account modes.
+         */
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            authTitle.textContent = isLoginMode ? 'Login' : 'Create Account';
+            authButton.textContent = isLoginMode ? 'Login' : 'Register';
+            toggleAuthModeButton.textContent = isLoginMode ? 'Create Account' : 'Back to Login';
+
+            // Show/hide email field based on mode
+            if (isLoginMode) {
+                emailField.classList.add('hidden');
+            } else {
+                emailField.classList.remove('hidden');
+            }
+
+            hideMessage(); // Clear any messages when switching modes
+            usernameInput.value = ''; // Clear inputs
+            emailInput.value = ''; // Clear email input
+            passwordInput.value = '';
+        }
+
+        /**
+         * Handles the authentication form submission (login or create account).
+         * @param {Event} event - The form submission event.
+         */
+        function handleAuthSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+            hideMessage();
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const email = emailInput.value.trim(); // Get email value
+
+            if (!username || !password) {
+                showMessage('Please enter both username and password.');
+                return;
+            }
+
+            if (isLoginMode) {
+                // Login logic
+                if (mockUsers[username] && mockUsers[username].password === password) {
+                    showMessage('Login successful!', false);
+                    setTimeout(showHomePage, 1000); // Redirect to home page after a short delay
+                } else {
+                    showMessage('Invalid username or password.');
+                }
+            } else {
+                // Create account logic
+                if (!email) {
+                    showMessage('Please enter your email address.');
+                    return;
+                }
+                if (!/\S+@\S+\.\S+/.test(email)) { // Basic email validation
+                    showMessage('Please enter a valid email address.');
+                    return;
+                }
+
+                if (mockUsers[username]) {
+                    showMessage('Username already exists. Please choose a different one.');
+                } else {
+                    mockUsers[username] = { password: password, email: email }; // Store user with email
+                    showMessage(`Account created successfully! A confirmation message has been sent to ${email}. Please login.`, false);
+                    setTimeout(() => {
+                        toggleAuthMode(); // Switch back to login mode
+                        usernameInput.value = username; // Pre-fill username for convenience
+                    }, 2000); // Longer delay to read email message
+                }
+            }
+        }
+
+        /**
+         * Shows the home page and hides the authentication page.
+         * Populates dynamic content.
+         */
+        function showHomePage() {
+            authPage.classList.add('hidden');
+            homePage.classList.remove('hidden');
+            logoutButton.classList.add('hidden'); // Hide logout button on home page
+            populateCourses();
+            populateFees();
+            populateStaff();
+            hideMessage();
+        }
+
+        /**
+         * Shows the authentication page and hides the home page.
+         */
+        function showAuthPage() {
+            homePage.classList.add('hidden');
+            authPage.classList.remove('hidden');
+            isLoginMode = true; // Reset to login mode
+            authTitle.textContent = 'Login';
+            authButton.textContent = 'Login';
+            toggleAuthModeButton.textContent = 'Create Account';
+            usernameInput.value = '';
+            emailInput.value = ''; // Clear email input
+            passwordInput.value = '';
+            emailField.classList.add('hidden'); // Ensure email field is hidden on login page
+            logoutButton.classList.remove('hidden'); // Show logout button when back on auth page
+            hideMessage();
+        }
+
+        /**
+         * Populates the courses section with data.
+         * Includes "Enhance Description" button and logic.
+         */
+        function populateCourses() {
+            const coursesList = document.getElementById('courses-list');
+            coursesList.innerHTML = ''; // Clear existing content
+            courses.forEach((course, index) => {
+                const courseCard = document.createElement('div');
+                courseCard.className = "bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out";
+                courseCard.innerHTML = `
+                    <img src="${course.image}" alt="${course.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${course.name}</h3>
+                        <p class="course-description text-gray-600 text-sm">${course.description}</p>
+                        <button class="enhance-description-btn mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-200 ease-in-out text-sm">
+                            <span class="btn-text">✨ Enhance Description</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                        <div class="enhanced-description mt-4 p-3 bg-blue-50 rounded-lg text-gray-700 text-sm italic border border-blue-200 hidden"></div>
+                    </div>
+                `;
+                coursesList.appendChild(courseCard);
+
+                const enhanceButton = courseCard.querySelector('.enhance-description-btn');
+                const btnText = enhanceButton.querySelector('.btn-text');
+                const btnSpinner = enhanceButton.querySelector('.spinner');
+                const enhancedDescriptionDiv = courseCard.querySelector('.enhanced-description');
+                const originalDescriptionP = courseCard.querySelector('.course-description');
+
+                // If a generated description already exists, display it
+                if (course.generatedDescription) {
+                    enhancedDescriptionDiv.textContent = course.generatedDescription;
+                    enhancedDescriptionDiv.classList.remove('hidden');
+                    originalDescriptionP.classList.add('hidden'); // Hide original if enhanced exists
+                    enhanceButton.classList.add('hidden'); // Hide button if already enhanced
+                }
+
+                enhanceButton.addEventListener('click', async () => {
+                    btnText.classList.add('hidden');
+                    btnSpinner.classList.remove('hidden');
+                    enhanceButton.disabled = true;
+
+                    try {
+                        const prompt = `Generate a more detailed and engaging description for a software coaching course named "${course.name}" with its current brief description: "${course.description}". Focus on benefits, key topics, and career prospects. Keep it concise, around 100-150 words.`;
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Leave as-is for Canvas to provide
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const generatedText = result.candidates[0].content.parts[0].text;
+                            courses[index].generatedDescription = generatedText; // Store generated description
+                            enhancedDescriptionDiv.textContent = generatedText;
+                            enhancedDescriptionDiv.classList.remove('hidden');
+                            originalDescriptionP.classList.add('hidden'); // Hide original description
+                            enhanceButton.classList.add('hidden'); // Hide the button after generation
+                        } else {
+                            showMessage('Failed to enhance description. Please try again.', true);
+                            console.error('Gemini API response structure unexpected:', result);
+                        }
+                    } catch (error) {
+                        showMessage('Error enhancing description: ' + error.message, true);
+                        console.error('Error calling Gemini API:', error);
+                    } finally {
+                        btnText.classList.remove('hidden');
+                        btnSpinner.classList.add('hidden');
+                        enhanceButton.disabled = false;
+                    }
+                });
+            });
+        }
+
+        /**
+         * Populates the fees section with data.
+         */
+        function populateFees() {
+            const feesTableBody = document.querySelector('#fees-table tbody');
+            feesTableBody.innerHTML = ''; // Clear existing content
+            fees.forEach(fee => {
+                const feeRow = `
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6 text-left whitespace-nowrap">${fee.course}</td>
+                        <td class="py-3 px-6 text-left">${fee.duration}</td>
+                        <td class="py-3 px-6 text-left">₹ ${fee.amount}</td>
+                    </tr>
+                `;
+                feesTableBody.innerHTML += feeRow;
+            });
+        }
+
+        /**
+         * Populates the staff section with data.
+         */
+        function populateStaff() {
+            const staffList = document.getElementById('staff-list');
+            staffList.innerHTML = ''; // Clear existing content
+            staff.forEach(member => {
+                const staffCard = `
+                    <div class="bg-white rounded-lg shadow-md p-6 text-center transform hover:scale-105 transition duration-300 ease-in-out">
+                        <img src="${member.image}" alt="${member.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-purple-300">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-1">${member.name}</h3>
+                        <p class="text-purple-600 text-sm font-medium mb-2">${member.role}</p>
+                        <p class="text-gray-600 text-sm">${member.bio}</p>
+                    </div>
+                `;
+                staffList.innerHTML += staffCard;
+            });
+        }
+
+        /**
+         * Suggests career paths based on user interests using Gemini API.
+         */
+        async function suggestCareerPaths() {
+            const interests = userInterestsInput.value.trim();
+            if (!interests) {
+                showMessage('Please enter your interests and skills to get career suggestions.', true);
+                return;
+            }
+
+            suggestCareerBtnText.classList.add('hidden');
+            suggestCareerSpinner.classList.remove('hidden');
+            suggestCareerBtn.disabled = true;
+            careerSuggestionsDiv.classList.add('hidden'); // Hide previous suggestions
+            careerSuggestionsContent.innerHTML = ''; // Clear previous content
+
+            try {
+                const prompt = `Based on the following interests and skills: "${interests}", suggest 3-5 software career paths. For each career path, also list 1-2 relevant courses from the following available courses: ${courses.map(c => c.name).join(', ')}. Provide the response in JSON format.`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: {
+                                type: "OBJECT",
+                                properties: {
+                                    "careerPath": { "type": "STRING", "description": "Name of the career path" },
+                                    "description": { "type": "STRING", "description": "Brief description of the career path" },
+                                    "relevantCourses": {
+                                        "type": "ARRAY",
+                                        "items": { "type": "STRING", "description": "Name of a relevant course from the provided list" }
+                                    }
+                                },
+                                "propertyOrdering": ["careerPath", "description", "relevantCourses"]
+                            }
+                        }
+                    }
+                };
+                const apiKey = ""; // Leave as-is for Canvas to provide
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const suggestions = JSON.parse(jsonString);
+
+                    if (suggestions.length > 0) {
+                        let htmlContent = '';
+                        suggestions.forEach(sug => {
+                            htmlContent += `
+                                <div class="mb-4 pb-4 border-b border-indigo-200 last:border-b-0">
+                                    <h4 class="text-lg font-semibold text-indigo-700">${sug.careerPath}</h4>
+                                    <p class="text-gray-700 mb-2">${sug.description}</p>
+                                    ${sug.relevantCourses && sug.relevantCourses.length > 0 ?
+                                        `<p class="text-sm text-gray-600 font-medium">Relevant Courses: ${sug.relevantCourses.join(', ')}</p>` : ''
+                                    }
+                                </div>
+                            `;
+                        });
+                        careerSuggestionsContent.innerHTML = htmlContent;
+                        careerSuggestionsDiv.classList.remove('hidden');
+                    } else {
+                        careerSuggestionsContent.innerHTML = '<p class="text-gray-600">No career path suggestions found based on your input. Please try rephrasing your interests.</p>';
+                        careerSuggestionsDiv.classList.remove('hidden');
+                    }
+                } else {
+                    showMessage('Failed to get career suggestions. Please try again.', true);
+                    console.error('Gemini API response structure unexpected:', result);
+                }
+            } catch (error) {
+                showMessage('Error suggesting career paths: ' + error.message, true);
+                console.error('Error calling Gemini API:', error);
+            } finally {
+                suggestCareerBtnText.classList.remove('hidden');
+                suggestCareerSpinner.classList.add('hidden');
+                suggestCareerBtn.disabled = false;
+            }
+        }
+
+
+        // Event Listeners
+        authForm.addEventListener('submit', handleAuthSubmit);
+        toggleAuthModeButton.addEventListener('click', toggleAuthMode);
+        logoutButton.addEventListener('click', showAuthPage);
+        suggestCareerBtn.addEventListener('click', suggestCareerPaths); // New event listener
+
+        // Initial page load: show login page
+        document.addEventListener('DOMContentLoaded', showAuthPage);
+    </script>
+</body>
+</html>
